@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/administrator/Desktop/android-projects/flappy-birds/core/build/libs/core-1.0.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="5ba1f665f1894325049ac99568d81e9276ee57c0">
+        <dex dex="/Users/administrator/Desktop/android-projects/flappy-birds/android/build/intermediates/pre-dexed/debug/core-1.0_36424003c8efef143a437038027adac18a055a9e.jar" />
+    </item>
+
+</items>
