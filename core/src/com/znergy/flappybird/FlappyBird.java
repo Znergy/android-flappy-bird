@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.Random;
+
 public class FlappyBird extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture background; // just an image texture = image
@@ -17,6 +19,13 @@ public class FlappyBird extends ApplicationAdapter {
 
 	int gameState = 0;
 	float gravity = 1.7f;
+	float gap = 400;
+	float maxTubeOffset;
+	Random randomGenerator;
+	float tubeOffset;
+
+	float tubeVelocity = 4;
+	float tubeX;
 
 	/** Happens on load */
 	@Override
@@ -30,6 +39,12 @@ public class FlappyBird extends ApplicationAdapter {
 		birds[1] = new Texture("bird2.png");
 
 		birdY = (Gdx.graphics.getHeight() /2) - (birds[0].getHeight() / 2);
+
+		maxTubeOffset = Gdx.graphics.getHeight() / 2 - gap / 2 - 100;
+
+		randomGenerator = new Random();
+
+		tubeX = Gdx.graphics.getWidth() / 2 - topTube.getWidth() / 2; // center of screen
 	}
 
 	/** Happens continuously as the app runs
@@ -38,6 +53,9 @@ public class FlappyBird extends ApplicationAdapter {
 	 */
 	@Override
 	public void render () {
+
+		batch.begin();
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		if(Gdx.input.justTouched()) {
 			gameState = 1;
@@ -54,7 +72,17 @@ public class FlappyBird extends ApplicationAdapter {
 			/** Controls how high the bird will jump (higher neg. = higher jump) */
 			if(Gdx.input.justTouched()) {
 				velocity = -28;
+
+				tubeOffset = (randomGenerator.nextFloat() - 0.5f) * (Gdx.graphics.getHeight() - gap - 200);
+
+				tubeX = Gdx.graphics.getWidth() / 2 - topTube.getWidth() / 2;
 			}
+
+			tubeX -= tubeVelocity;
+
+			batch.draw(topTube, tubeX, Gdx.graphics.getHeight() / 2 + gap / 2 + tubeOffset);
+			batch.draw(bottomTube, tubeX, Gdx.graphics.getHeight() / 2 - gap / 2 - bottomTube.getHeight() + tubeOffset);
+
 			/** Prevents from dropping off screen (reset to start pos. if falls off) */
 			if(birdY > 0) {
 				velocity += gravity;
@@ -81,10 +109,6 @@ public class FlappyBird extends ApplicationAdapter {
 			flapState = 0;
 		}
 
-		batch.begin();
-		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.draw(topTube, Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 850);
-		batch.draw(bottomTube, Gdx.graphics.getWidth() - 350, -250);
 		batch.draw(birds[flapState], (Gdx.graphics.getWidth() / 2) - (birds[flapState].getWidth() / 2), birdY);
 		batch.end();
 	}
